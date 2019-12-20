@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import scrapy
-from amazon.items import AmazonItem
+from amazon_scraper.items import AmazonItem
 
 
 class AmazonProductSpider(scrapy.Spider):
