@@ -1,8 +1,8 @@
 import pandas as pd
-import matplotlib as plt
+import matplotlib.pyplot as plt
 
-pd.read_csv("reviews.csv")
+dataset = pd.read_csv("reviews.csv")
 
-summarised_results = pd.dataset["stars"].value_counts()
-plt.bar(summarised_results.keys(), summarised_results.values)
+summarised_results = dataset["stars"].value_counts()
+summarised_results.plot.bar()
 plt.show()

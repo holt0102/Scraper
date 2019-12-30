@@ -2,6 +2,7 @@
 
 # Importing Scrapy Library
 import scrapy
+from bs4 import BeautifulSoup
 
 
 # Creating a new class to implement Spide
@@ -10,35 +11,54 @@ class AmazonReviewsSpider(scrapy.Spider):
     name = 'amazon_reviews'
 
     # Domain names to scrape
-    allowed_domains = ['amazon.in']
+    allowed_domains = ['amazon.com.mx']
 
-    # Base URL for the MacBook air reviews
-    myBaseUrl = 'https://www.amazon.in/Apple-MacBook-' \
-                'Air-13-3-inch-MQD32HN/product-' \
-                'reviews/B073Q5R6VR/ref=cm_cr_dp_d_show' \
-                '_all_btm?ie=UTF8&reviewerType=all_reviews' \
-                '&pageNumber='
-    start_urls = []
+    # Base URL with search "iphone x smartphone"
+    start_urls = ['https://www.amazon.com.mx/s?k=iphone+x+smartphone&rh=n%3A9687460011&__mk_es_MX=%C3%85M%C3%85%C5%BD%C3%95%C3%91&ref=nb_sb_noss']
 
-    # Creating list of urls to be scraped by appending
-    # page number a the end of base url
-    for i in range(1, 121):
-        start_urls.append(myBaseUrl + str(i))
+    # Spider configuration
+    custom_settings = {'CONCURRENT_REQUESTS': '1', 'DEFAULT_ITEM_CLASS' : 'AmazonItem'}
 
     # Defining a Scrapy parser
     def parse(self, response):
-            data = response.css('#cm_cr-review_list')
 
-            # Collecting product star ratings
-            star_rating = data.css('.review-rating')
+        # Parse each result (24 per page)
 
-            # Collecting user reviews
-            comments = data.css('.review-text')
-            count = 0
+        for item in response.xpath('//span[@cel_widget_id="SEARCH_RESULTS-SEARCH_RESULTS"]'):
 
-            # Combining the results
-            for review in star_rating:
-                yield{'stars': ''.join(review.xpath('.//text()').extract()),
-                      'comment': ''.join(comments[count].xpath(".//text()") \
-                            .extract())}
-                count = count + 1
+            product = AmazonItem()
+
+            item_bs4 = BeautifulSoup(item.get(), "lxml")
+
+            price_bs4 = item_bs4.find("span", {"class" : "a-price-whole"})
+            name_bs4 = item_bs4.find("span", {"class" : "a-size-base-plus a-color-base a-text-normal"})
+            rating_bs4 = item_bs4.find("span", {"class" : "a-icon-alt"})
+
+            # Product sale price
+
+            if price_bs4:
+                product['product_sale_price'] = price_bs4.text
+            else:
+                product['product_sale_price'] = "NA"
+
+            # Product name
+
+            if name_bs4:
+                product['product_name'] = name_bs4.text
+            else:
+                product['product_name'] = "NA"
+
+            # Product rating
+
+            if rating_bs4:
+                product['product_rating'] = rating_bs4.text
+            else:
+                product['product_rating'] = "NA"
+
+            # Other attributes
+
+            product['product_category'] = "NA"
+            product['product_original_price'] = "NA"
+            product['product_availability'] = "NA"
+
+            yield{ item }
