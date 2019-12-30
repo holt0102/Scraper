@@ -3,7 +3,7 @@
 # Importing Scrapy Library
 import scrapy
 from bs4 import BeautifulSoup
-
+from amazon_scraper.items import AmazonItem
 
 # Creating a new class to implement Spide
 class AmazonReviewsSpider(scrapy.Spider):
@@ -61,4 +61,4 @@ class AmazonReviewsSpider(scrapy.Spider):
             product['product_original_price'] = "NA"
             product['product_availability'] = "NA"
 
-            yield{ item }
+            yield{ product }
