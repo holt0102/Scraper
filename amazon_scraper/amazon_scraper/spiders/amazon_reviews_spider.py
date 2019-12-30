@@ -17,7 +17,7 @@ class AmazonReviewsSpider(scrapy.Spider):
     start_urls = ['https://www.amazon.com.mx/s?k=iphone+x+smartphone&rh=n%3A9687460011&__mk_es_MX=%C3%85M%C3%85%C5%BD%C3%95%C3%91&ref=nb_sb_noss']
 
     # Spider configuration
-    custom_settings = {'CONCURRENT_REQUESTS': '1', 'DEFAULT_ITEM_CLASS' : 'AmazonItem'}
+    custom_settings = {'CONCURRENT_REQUESTS': '1', 'DEFAULT_ITEM_CLASS' : 'AmazonItem', 'ROBOTSTXT_OBEY': 'False'}
 
     # Defining a Scrapy parser
     def parse(self, response):
@@ -61,4 +61,4 @@ class AmazonReviewsSpider(scrapy.Spider):
             product['product_original_price'] = "NA"
             product['product_availability'] = "NA"
 
-            yield{ product }
+            yield product
