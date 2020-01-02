@@ -5,7 +5,7 @@ import scrapy
 from bs4 import BeautifulSoup
 from amazon_scraper.items import AmazonItem
 
-# Creating a new class to implement Spide
+# Creating a new class to implement Spider
 class AmazonReviewsSpider(scrapy.Spider):
     # Spider name
     name = 'amazon_reviews'
@@ -62,3 +62,11 @@ class AmazonReviewsSpider(scrapy.Spider):
             product['product_availability'] = "NA"
 
             yield product
+
+        # Get next page
+
+        next_page = response.css('li.a-last a::attr(href)').get()
+
+        if next_page:
+
+            yield response.follow(next_page, callback=self.parse)
