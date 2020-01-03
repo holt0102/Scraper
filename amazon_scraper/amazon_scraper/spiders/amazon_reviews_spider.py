@@ -22,7 +22,7 @@ class AmazonReviewsSpider(scrapy.Spider):
 
     # Spider configuration
     custom_settings = {'CONCURRENT_REQUESTS': '1',
-                       'DEFAULT_ITEM_CLASS' : 'AmazonItem',
+                       'DEFAULT_ITEM_CLASS': 'AmazonItem',
                        'ROBOTSTXT_OBEY': 'False'}
 
     # Defining a Scrapy parser
