@@ -71,4 +71,3 @@ class AmazonReviewsSpider(scrapy.Spider):
             product['product_availability'] = "NA"
 
             yield product
-
