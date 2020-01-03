@@ -12,18 +12,24 @@ class AmazonReviewsSpider(scrapy.Spider):
     name = 'amazon_reviews'
 
     # Domain names to scrape
-    allowed_domains = ['amazon.com.mx']
+    allowed_domains = []
 
     # Base URL with search "iphone x smartphone"
-    start_urls = ['https://www.amazon.com.mx/s?'
-                  'k=iphone+x+smartphone&rh=n%3'
-                  'A9687460011&__mk_es_MX=%C3%8'
-                  '5M%C3%85%C5%BD%C3%95%C3%91&ref=nb_sb_noss']
+    start_urls = []
 
     # Spider configuration
     custom_settings = {'CONCURRENT_REQUESTS': '1',
                        'DEFAULT_ITEM_CLASS': 'AmazonItem',
                        'ROBOTSTXT_OBEY': 'False'}
+
+    def __init__(self, **kwargs):
+        # Fixed domain for now
+        self.allowed_domains = ['amazon.com.mx']
+
+        # Read urls from urls.txt
+        f = open(kwargs['filename'], 'r')
+        self.start_urls = [url.strip() for url in f.readlines()]
+        f.close()
 
     # Defining a Scrapy parser
     def parse(self, response):
@@ -32,7 +38,6 @@ class AmazonReviewsSpider(scrapy.Spider):
 
         for item in response.xpath('//span[@cel_widget_id='
                                    '"SEARCH_RESULTS-SEARCH_RESULTS"]'):
-
             product = AmazonItem()
 
             item_bs4 = BeautifulSoup(item.get(), "lxml")
@@ -73,9 +78,7 @@ class AmazonReviewsSpider(scrapy.Spider):
             yield product
 
         # Get next page
-
         next_page = response.css('li.a-last a::attr(href)').get()
 
         if next_page:
-
             yield response.follow(next_page, callback=self.parse)
