@@ -22,7 +22,8 @@ class AmazonReviewsSpider(scrapy.Spider):
 
     # Spider configuration
     custom_settings = {'CONCURRENT_REQUESTS': '1',
-                       'DEFAULT_ITEM_CLASS': 'AmazonItem'}
+                       'DEFAULT_ITEM_CLASS' : 'AmazonItem',
+                       'ROBOTSTXT_OBEY': 'False'}
 
     # Defining a Scrapy parser
     def parse(self, response):
@@ -69,4 +70,5 @@ class AmazonReviewsSpider(scrapy.Spider):
             product['product_original_price'] = "NA"
             product['product_availability'] = "NA"
 
-            yield{product}
+            yield product
+
