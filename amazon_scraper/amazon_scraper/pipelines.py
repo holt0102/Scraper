@@ -31,11 +31,11 @@ class SQLStorePipeline(object):
         cursor.execute('INSERT INTO product_entry'
                        '(Name, SKU, URL, Precio, Rating, Review, Date)'
                        'VALUES ({}, {}, {}, {}, {}, {}, {});'
-                       .format(item.product_name,
+                       .format(item['product_name'],
                                'SKU',
                                'URL',
-                               item.product_sale_price,
-                               item.product_rating,
+                               item['product_sale_price'],
+                               item['product_rating'],
                                'Review',
                                'Date'))
 
