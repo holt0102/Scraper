@@ -49,28 +49,24 @@ class AmazonReviewsSpider(scrapy.Spider):
             rating_bs4 = item_bs4.find("span", {"class": "a-icon-alt"})
 
             # Product sale price
-
             if price_bs4:
                 product['product_sale_price'] = price_bs4.text
             else:
                 product['product_sale_price'] = "NA"
 
             # Product name
-
             if name_bs4:
                 product['product_name'] = name_bs4.text
             else:
                 product['product_name'] = "NA"
 
             # Product rating
-
             if rating_bs4:
                 product['product_rating'] = rating_bs4.text
             else:
                 product['product_rating'] = "NA"
 
             # Other attributes
-
             product['product_category'] = "NA"
             product['product_original_price'] = "NA"
             product['product_availability'] = "NA"
