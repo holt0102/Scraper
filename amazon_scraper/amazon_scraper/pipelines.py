@@ -34,7 +34,7 @@ class SQLStorePipeline(object):
                 'VALUES ("{}", "{}", "{}", {}, "{}", "{}", "{}");'
 
         query = query.format(item['product_name'], 'SKU', 'URL',
-                             item['product_sale_price'],
+                             float(item['product_sale_price']),
                              item['product_rating'],
                              'Review', 'Date')
 
