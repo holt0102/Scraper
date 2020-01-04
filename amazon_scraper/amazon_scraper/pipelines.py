@@ -33,7 +33,8 @@ class SQLStorePipeline(object):
                 '(Name, SKU, URL, Precio, Rating, Review, Date) ' + \
                 'VALUES ("{}", "{}", "{}", {}, "{}", "{}", "{}");'
 
-        query = query.format(item['product_name'], 'SKU', 'URL',
+        query = query.format(item['product_name'].replace('"', ''),
+                             'SKU', 'URL',
                              float(item['product_sale_price']
                                    .replace(',', '')),
                              item['product_rating'],
