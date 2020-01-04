@@ -5,7 +5,7 @@
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 
-import mysql.connector
+import mysql.connector as mysql
 
 
 class AmazonScraperPipeline(object):
@@ -16,9 +16,9 @@ class AmazonScraperPipeline(object):
 class SQLStorePipeline(object):
 
     def __init__(self):
-        self.db = mysql.connector.connect(host="localhost",
-                                          user="root",
-                                          passwd="root")
+        self.db = mysql.connect(host='localhost',
+                                user='root',
+                                passwd='root')
 
         # Show databases
         cursor = self.db.cursor()
