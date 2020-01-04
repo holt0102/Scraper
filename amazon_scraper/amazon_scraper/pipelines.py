@@ -28,7 +28,7 @@ class SQLStorePipeline(object):
             print(x)
 
     def process_item(self, item, spider):
-        cursor = self.db.cursor()
+        # Construct query
         query = 'INSERT INTO product_entry ' + \
                 '(Name, SKU, URL, Precio, Rating, Review, Date) ' + \
                 'VALUES ("{}", "{}", "{}", {}, "{}", "{}", "{}");'
@@ -40,12 +40,10 @@ class SQLStorePipeline(object):
                              item['product_rating'],
                              'Review', 'Date')
 
-        print(query)
-        input()
-
+        # Execute query
+        cursor = self.db.cursor()
         cursor.execute(query)
         self.db.commit()
-
         print(cursor.rowcount, "record inserted.")
 
         return item
