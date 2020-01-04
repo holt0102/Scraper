@@ -44,5 +44,8 @@ class SQLStorePipeline(object):
         input()
 
         cursor.execute(query)
+        self.db.commit()
+
+        print(cursor.rowcount, "record inserted.")
 
         return item
