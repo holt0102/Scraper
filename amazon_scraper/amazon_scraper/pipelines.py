@@ -17,8 +17,8 @@ class SQLStorePipeline(object):
 
     def __init__(self):
         self.db = mysql.connect(host='localhost',
-                                user='root',
-                                passwd='root')
+                                user='remote',
+                                passwd='K@rm@-P0l1c3')
 
         # Show databases
         cursor = self.db.cursor()
