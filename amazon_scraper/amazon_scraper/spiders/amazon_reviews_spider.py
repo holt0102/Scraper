@@ -52,29 +52,66 @@ class AmazonReviewsSpider(scrapy.Spider):
             if price_bs4:
                 product['product_sale_price'] = price_bs4.text
             else:
-                product['product_sale_price'] = "NA"
+                pass
 
             # Product name
             if name_bs4:
                 product['product_name'] = name_bs4.text
             else:
-                product['product_name'] = "NA"
+                pass
 
             # Product rating
             if rating_bs4:
                 product['product_rating'] = rating_bs4.text
             else:
-                product['product_rating'] = "NA"
+                pass
 
-            # Other attributes
-            product['product_category'] = "NA"
-            product['product_original_price'] = "NA"
-            product['product_availability'] = "NA"
+            # Open product link to get category and availability
 
-            yield product
+            #link_bs4 = item.xpath('.//a[@class="a-link-normal a-text-normal"]/@href').get()
+            link_bs4 = item_bs4.find("a", {"class": "a-link-normal a-text-normal"})
+
+            if link_bs4:
+
+                item_link = response.urljoin(link_bs4['href'])
+
+                yield scrapy.Request(item_link,
+                                meta={'meta_item':product}, callback=self.parse_item)
+
+            else:
+
+                product['product_category'] = "NA"
+                product['product_availability'] = "NA"
+
+                yield product
 
         # Get next page
         next_page = response.css('li.a-last a::attr(href)').get()
 
         if next_page:
             yield response.follow(next_page, callback=self.parse)
+
+    # Scrapy parser for product page info (availability and category)
+    def parse_item(self, response):
+
+        product = response.meta['meta_item']
+
+        # Get and validate availability
+
+        availability = response.xpath('//div[@id="availability"]').xpath('.//span/text()')
+
+        if availability:
+            product['product_availability'] = availability.get().strip()
+        else:
+            product['product_availability'] = "NA"
+
+        # Get and validate category
+
+        category = response.xpath('//ul[@class="a-unordered-list a-horizontal a-size-small"]').xpath('.//li')[-1].xpath('.//span/a/text()')
+
+        if category:
+            product['product_category'] = category.get().strip()
+        else:
+            product['product_category'] = "NA"
+
+        yield product
