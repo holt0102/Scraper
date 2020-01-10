@@ -75,8 +75,9 @@ class AmazonReviewsSpider(scrapy.Spider):
 
                 item_link = response.urljoin(link_bs4['href'])
 
-                yield scrapy.Request(item_link,
-                                meta={'meta_item':product}, callback=self.parse_item)
+                yield scrapy.Request(
+                    item_link,
+                    meta={'meta_item': product}, callback=self.parse_item)
 
             else:
 

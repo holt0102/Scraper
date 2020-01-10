@@ -30,15 +30,20 @@ class SQLStorePipeline(object):
     def process_item(self, item, spider):
         # Construct query
         query = 'INSERT INTO product_entry ' + \
-                '(Name, SKU, URL, Precio, Rating, Review, Date) ' + \
-                'VALUES ("{}", "{}", "{}", {}, "{}", "{}", "{}");'
+                '(Name, SKU, URL, ' + \
+                'Precio, Rating, ' + \
+                'Review, Date, ' + \
+                'Category, Disponibility) ' + \
+                'VALUES ("{}", "{}", "{}", {}, "{}", "{}", "{}", "{}", "{}");'
 
         query = query.format(item['product_name'].replace('"', ''),
                              'SKU', 'URL',
                              float(item['product_sale_price']
                                    .replace(',', '')),
                              item['product_rating'],
-                             'Review', 'Date')
+                             'Review', 'Date',
+                             item['product_category'],
+                             item['product_availability'])
 
         # Execute query
         cursor = self.db.cursor()
