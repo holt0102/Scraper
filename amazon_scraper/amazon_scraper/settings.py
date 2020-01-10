@@ -64,11 +64,16 @@ ROBOTSTXT_OBEY = True
 
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
-ITEM_PIPELINES = {
-    'amazon_scraper.pipelines.SQLStorePipeline': 50,
-    'amazon_scraper.pipelines.AmazonScraperPipeline': 100
-}
 
+ITEM_PIPELINES = {
+    'amazon_scraper.pipelines.SQLStorePipeline': 100,
+    'amazon_scraper.pipelines.AmazonScraperPipeline': 50
+}
+'''
+ITEM_PIPELINES = {
+    'amazon_scraper.pipelines.AmazonScraperPipeline': 50
+}
+'''
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/autothrottle.html
 # AUTOTHROTTLE_ENABLED = True
